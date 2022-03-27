@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from myapp.models import TestModel
+from myapp.models import TestModel, RoomModel
 
 class TestSerealizer(serializers.ModelSerializer):
     class Meta:
@@ -16,3 +16,8 @@ class TestSerealizer(serializers.ModelSerializer):
     #     if 'hoge' in store_name.lower():
     #         raise serializers.ValidationError('The store_name `hoge` can not be used.')
     #     return store_name
+
+class RoomSerealizer(serializers.ModelSerializer):
+    class Meta:
+        model = RoomModel
+        fields = '__all__'

@@ -21,6 +21,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path( 'get_test_information/', views.TestInformation.as_view(), name='get_test_information'),
+    path( 'room/information/all', views.RoomInformation.as_view(), name='room_information_all'),
+    path( 'room/add/', views.AddRoomInformation.as_view(), name='add_room'),
     re_path( 'swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),     # Swagger-Editor用 json or yaml形式 ダウンロード 
     path( 'swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),   # Swagger-UI形式
     path( 'redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),       # Redoc形式
