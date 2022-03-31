@@ -3,6 +3,8 @@ import Home from "../views/Home.vue";
 import TestView from "../views/TestView.vue";
 import PokemonView from "../views/PokemonView.vue";
 import DevelopView from "../views/DevelopView.vue";
+import VoteView from "../views/VoteView.vue";
+
 
 const routes = [
   {
@@ -33,6 +35,11 @@ const routes = [
     path: "/develop",
     name: "develop",
     component: DevelopView,
+  },
+  {
+    path: "/vote",
+    name: "vote",
+    component: VoteView,
   },
 ];
 

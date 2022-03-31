@@ -55,11 +55,7 @@ class AddRoomInformation(generics.ListCreateAPIView):
     #     return Response(status=response.status_code)
 
     def create(self, request, *args, **kwargs):
-
-        # ここで任意のURLを作成する
-        request.data['room_url'] = "http://testurl8888.com"
-
-        serializer = self.get_serializer(data=request.data)
+        print("【DEBUG】request headers {}".format(request.headers['Host']))
 
         if ( request.data['upload_image1'] is None ) or ( request.data['upload_image2'] is None ):
             # いずれかの画像が未選択の場合はデータなしとする
@@ -74,6 +70,12 @@ class AddRoomInformation(generics.ListCreateAPIView):
             save_dir_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             save_image_dir_name_list = decode_upload_image(img_base64_list, save_dir_name)
 
+            # ここで任意のURLを作成する
+            request.data['room_url'] = "http://" + request.headers['Host'] + "/view/" + save_dir_name
+
+        print(save_image_dir_name_list)
+        print(request.data['room_name'], request.data['room_url'], request.data['image1_name'], request.data['image2_name'])
+        serializer = self.get_serializer(data=request.data)
 
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

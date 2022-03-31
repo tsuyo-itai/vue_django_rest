@@ -91,12 +91,10 @@ export default {
     methods: {
         uploadImage1 (event) {
             this.UploadImage1 = event
-            console.log(event)
             console.log("event1 ok")
         },
         uploadImage2 (event) {
             this.UploadImage2 = event
-            console.log(event)
             console.log("event2 ok")
         },
         roomSettingPopUp () {
