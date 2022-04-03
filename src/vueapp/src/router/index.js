@@ -37,7 +37,7 @@ const routes = [
     component: DevelopView,
   },
   {
-    path: "/vote",
+    path: "/vote/:room_token",
     name: "vote",
     component: VoteView,
   },

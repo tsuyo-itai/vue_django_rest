@@ -35,10 +35,32 @@ class TestInformation(generics.ListAPIView):
 
     #     return TestModel.objects.filter(email=user)
 
-class RoomInformation(generics.ListAPIView):
-
+class RoomInformation(generics.RetrieveAPIView):
     queryset = RoomModel.objects.all()
     serializer_class = RoomSerealizer
+    lookup_field = 'room_token'
+
+    #! 現状同じ値がDBに複数あるとエラーになる。 model格納時にuniqueを追加するか等の検討
+
+    def get(self, request, **kwargs):
+        url_path_token = kwargs.get('room_token')
+        # .values()でクエリセットをjsonで取得
+        room_model = RoomModel.objects.values().get(room_token=url_path_token)
+
+        if room_model["image1_path"] is not None:
+            # saveディレクトリのpathを追加し、エンコード
+            room_model["image1_path"] = "media/" + room_model["image1_path"]
+            room_model["image1_path"] = encode_upload_image(room_model["image1_path"])
+        
+        if room_model["image2_path"] is not None:
+            # saveディレクトリのpathを追加し、エンコード
+            room_model["image2_path"] = "media/" + room_model["image2_path"]
+            room_model["image2_path"] = encode_upload_image(room_model["image2_path"])
+
+        # print("【DEBUG】", room_model)
+
+        return Response(room_model)
+
 
 class AddRoomInformation(generics.ListCreateAPIView):
     serializer_class = RoomSerealizer
@@ -53,6 +75,9 @@ class AddRoomInformation(generics.ListCreateAPIView):
     #     print(response)
 
     #     return Response(status=response.status_code)
+    def get_queryset(self):
+        return RoomModel.objects.all()
+
 
     def create(self, request, *args, **kwargs):
         print("【DEBUG】request headers {}".format(request.headers['Host']))
@@ -73,6 +98,10 @@ class AddRoomInformation(generics.ListCreateAPIView):
             # ここで任意のURLを作成する
             request.data['room_url'] = "http://" + request.headers['Host'] + "/view/" + save_dir_name
 
+            # ここでトークンを作成する
+            #?現状tokenは登録日付
+            request.data['room_token'] = save_dir_name
+
         print(save_image_dir_name_list)
         print(request.data['room_name'], request.data['room_url'], request.data['image1_name'], request.data['image2_name'])
         serializer = self.get_serializer(data=request.data)
@@ -83,6 +112,7 @@ class AddRoomInformation(generics.ListCreateAPIView):
         create_model = RoomModel.objects.create(
             room_name=request.data['room_name'],
             room_url=request.data['room_url'],
+            room_token=request.data['room_token'],
             image1_name=request.data['image1_name'],
             image1_path=save_image_dir_name_list[0],
             image2_name=request.data['image2_name'],
@@ -93,6 +123,12 @@ class AddRoomInformation(generics.ListCreateAPIView):
         return Response(result.data, status=status.HTTP_201_CREATED)
 
 
+'''---------------------------------------------
+@ base64エンコードイメージのデコード保存関数
+@ in        img_base64_list: base64エンコード文字列(List(str))
+            media_dir: 保存ディレクトリ名(str)
+@ return    保存ディレクトリ名のリストList(str)
+---------------------------------------------'''
 def decode_upload_image(img_base64_list, media_dir):
     ret_list = []
 
@@ -128,3 +164,19 @@ def decode_upload_image(img_base64_list, media_dir):
         ret_list.append(save_image_dir_name)
 
     return ret_list
+
+
+'''---------------------------------------------
+@ イメージのbase64エンコード関数
+@ in        img_path: イメージの保存path(str)
+@ return    base64エンコード文字列(str)
+---------------------------------------------'''
+def encode_upload_image(img_path):
+    # 拡張子の取得
+    image_format = img_path.split(".")[1]
+
+    with open(img_path, 'rb') as f:
+        data = f.read()
+    encode_data = base64.b64encode(data)
+
+    return "data:image/{};base64,{}".format(image_format, encode_data.decode())

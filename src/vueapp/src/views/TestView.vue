@@ -20,6 +20,7 @@ export default {
       .get("/api/v1/get_test_information/")
       .then((response) => {
         this.Datas = response.data;
+        console.log(response.data)
       });
   },
 };
