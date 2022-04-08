@@ -139,6 +139,8 @@ export default {
                 this.$nextTick(function() {
                     // nextTickを使用してコンソールにログを出力します。
                     console.log(this.RoomURL);
+                    this. ShowContentRoomSetting = false
+                    this.roomAddCompPopUp()
                 });
             })
             .catch(error => {
@@ -149,11 +151,10 @@ export default {
                 this.$nextTick(function() {
                     // nextTickを使用してコンソールにログを出力します。
                     console.log(this.RoomURL);
+                    this. ShowContentRoomSetting = false
+                    this.roomAddCompPopUp()
                 });
             });
-
-            this. ShowContentRoomSetting = false
-            this.roomAddCompPopUp()
         },
 
     }

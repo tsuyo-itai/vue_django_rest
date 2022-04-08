@@ -80,7 +80,8 @@ class AddRoomInformation(generics.ListCreateAPIView):
 
 
     def create(self, request, *args, **kwargs):
-        print("【DEBUG】request headers {}".format(request.headers['Host']))
+        print("【DEBUG】request headers {}".format(request.headers['Origin']))
+        print(request.headers)
 
         if ( request.data['upload_image1'] is None ) or ( request.data['upload_image2'] is None ):
             # いずれかの画像が未選択の場合はデータなしとする
@@ -96,7 +97,7 @@ class AddRoomInformation(generics.ListCreateAPIView):
             save_image_dir_name_list = decode_upload_image(img_base64_list, save_dir_name)
 
             # ここで任意のURLを作成する
-            request.data['room_url'] = "http://" + request.headers['Host'] + "/view/" + save_dir_name
+            request.data['room_url'] = request.headers['Origin'] + "/vote/" + save_dir_name
 
             # ここでトークンを作成する
             #?現状tokenは登録日付
