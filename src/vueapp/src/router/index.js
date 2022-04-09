@@ -5,7 +5,6 @@ import PokemonView from "../views/PokemonView.vue";
 import DevelopView from "../views/DevelopView.vue";
 import VoteView from "../views/VoteView.vue";
 
-
 const routes = [
   {
     path: "/",

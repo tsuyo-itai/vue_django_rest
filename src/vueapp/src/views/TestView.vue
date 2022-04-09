@@ -16,12 +16,10 @@ export default {
     };
   },
   mounted() {
-    this.axios
-      .get("/api/v1/get_test_information/")
-      .then((response) => {
-        this.Datas = response.data;
-        console.log(response.data)
-      });
+    this.axios.get("/api/v1/get_test_information/").then((response) => {
+      this.Datas = response.data;
+      console.log(response.data);
+    });
   },
 };
 </script>
