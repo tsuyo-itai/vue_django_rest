@@ -212,9 +212,12 @@ justify-content: center;
 
 #room-setting-content, #room-add-complete-content{
 z-index:2;
-width:50%;
+width:65%;
+max-height: 650px;
 padding: 1em;
 background:#fff;
+overflow-y: auto;
+overflow-y: scroll;
 }
 
 .close_popup {
