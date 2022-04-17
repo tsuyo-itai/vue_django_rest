@@ -24,6 +24,7 @@ urlpatterns = [
     #!  以下の取得はroom token をモデルに追加し、そこから取得を行う
     path( 'room/information/<str:room_token>', views.RoomInformation.as_view(), name='room_information'),
     path( 'room/add/', views.AddRoomInformation.as_view(), name='add_room'),
+    path( 'room/vote/<str:room_token>', views.VoteRoomInformation.as_view(), name='vote_room'),
     re_path( 'swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),     # Swagger-Editor用 json or yaml形式 ダウンロード 
     path( 'swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),   # Swagger-UI形式
     path( 'redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),       # Redoc形式

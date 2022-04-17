@@ -123,6 +123,15 @@ class AddRoomInformation(generics.ListCreateAPIView):
         result = RoomSerealizer(create_model)
         return Response(result.data, status=status.HTTP_201_CREATED)
 
+class VoteRoomInformation(generics.RetrieveUpdateAPIView):
+    queryset = RoomModel.objects.all()
+    serializer_class = RoomSerealizer
+    lookup_field = 'room_token'
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
+
 
 '''---------------------------------------------
 @ base64エンコードイメージのデコード保存関数

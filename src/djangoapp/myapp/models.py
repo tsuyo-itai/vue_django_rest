@@ -17,8 +17,10 @@ class RoomModel(models.Model):
     room_token = models.CharField(max_length=120)
     image1_name = models.CharField(null=True, max_length=100)
     image1_path = models.ImageField(null=True, blank=True)
+    image1_votenum = models.IntegerField(default=0)
     image2_name = models.CharField(null=True, max_length=100)
     image2_path = models.ImageField(null=True, blank=True)
+    image2_votenum = models.IntegerField(default=0)
 
     def __str__(self):
         return self.room_name
