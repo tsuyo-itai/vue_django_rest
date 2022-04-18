@@ -103,8 +103,7 @@ class AddRoomInformation(generics.ListCreateAPIView):
             #?現状tokenは登録日付
             request.data['room_token'] = save_dir_name
 
-        print(save_image_dir_name_list)
-        print(request.data['room_name'], request.data['room_url'], request.data['image1_name'], request.data['image2_name'])
+        print("【DEBUG】", request.data['room_name'], request.data['room_url'], request.data['image1_name'], request.data['image2_name'])
         serializer = self.get_serializer(data=request.data)
 
         if not serializer.is_valid():
@@ -118,6 +117,9 @@ class AddRoomInformation(generics.ListCreateAPIView):
             image1_path=save_image_dir_name_list[0],
             image2_name=request.data['image2_name'],
             image2_path=save_image_dir_name_list[1],
+            # create時は投票数は0
+            image1_votenum=0,
+            image2_votenum=0
         )
 
         result = RoomSerealizer(create_model)

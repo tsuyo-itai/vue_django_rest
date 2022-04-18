@@ -8,10 +8,7 @@
         <p>{{ Image1Name }}</p>
         <p>現在の投票数: {{ Image1VoteNum }}</p>
         <div class="box-vote">
-          <button v-on:click="user1VoteClick">投票する</button>
-          <div v-show="bUser1Vote">
-            <span class="circle-icon"></span>
-          </div>
+          <button id="vote-button1" class="btn-solid" v-on:click="user1VoteClick">投票する</button>
         </div>
       </div>
 
@@ -20,10 +17,7 @@
         <p>{{ Image2Name }}</p>
         <p>現在の投票数: {{ Image2VoteNum }}</p>
         <div class="box-vote">
-          <button v-on:click="user2VoteClick">投票する</button>
-          <div v-show="bUser2Vote">
-            <span class="circle-icon"></span>
-          </div>
+          <button id="vote-button2" class="btn-solid" v-on:click="user2VoteClick">投票する</button>
         </div>
       </div>
     </div>
@@ -73,6 +67,8 @@ export default {
         this.nUser1VoteCnt = 1;
         this.bUser2Vote = false;
         this.nUser2VoteCnt = 0;
+
+        this.VoteButtonHighlight(this.bUser1Vote, this.bUser2Vote);
       }
     },
     user2VoteClick() {
@@ -82,7 +78,27 @@ export default {
         this.nUser2VoteCnt = 1;
         this.bUser1Vote = false;
         this.nUser1VoteCnt = 0;
+
+        this.VoteButtonHighlight(this.bUser1Vote, this.bUser2Vote);
       }
+    },
+    VoteButtonHighlight(vote1, vote2) {
+      let elembutton1 = document.querySelector('#vote-button1');
+      let elembutton2 = document.querySelector('#vote-button2');
+      if (vote1) {
+        elembutton1.classList.add('highlight');
+      }
+      else {
+        elembutton1.classList.remove('highlight');
+      }
+
+      if (vote2) {
+        elembutton2.classList.add('highlight');
+      }
+      else {
+        elembutton2.classList.remove('highlight');
+      }
+
     },
     VoteResultSend() {
       if (this.bUser1Vote || this.bUser2Vote) {
@@ -101,6 +117,7 @@ export default {
               // nextTickを使用してコンソールにログを出力します。
               this.bUser1Vote = false;
               this.bUser2Vote = false;
+              this.VoteButtonHighlight(this.bUser1Vote, this.bUser2Vote);
             });
             // ここでページのリロードと同ユーザーからの送信制御を行いたい
           });
@@ -115,6 +132,7 @@ export default {
 <style scoped>
 img {
   width: 500px;
+  margin: 30px;
 }
 
 .img_frame {
@@ -123,21 +141,41 @@ img {
 }
 
 .box-vote {
-  height: 30px;
+  height: 40px;
   display: flex;
   justify-content: center;
   gap: 15px;
 }
 
-.circle-icon {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: #f14040;
-}
-
 .container {
   margin: 100px;
+}
+
+.btn-solid {
+  color: #fff;
+  border-top: 4px solid #48ecc4;
+  border-right: 4px solid #0a5f4a;
+  border-bottom: 4px solid #0f745b;
+  border-left: 4px solid #8cf9de;
+  border-radius: 0;
+  background: #11a37f;
+}
+
+.btn-solid:hover {
+  color: #fff;
+  border-top: 4px solid #0f745b;
+  border-right: 4px solid #8cf9de;
+  border-bottom: 4px solid #48ecc4;
+  border-left: 4px solid #0a5f4a;
+}
+
+.btn-solid.highlight {
+  color: #fff;
+  border-top: 6px solid #f25656;
+  border-right: 6px solid #e02626;
+  border-bottom: 6px solid #d53e3e;
+  border-left: 6px solid #ea6868;
+  border-radius: 0;
+  background: #11a37f;
 }
 </style>
