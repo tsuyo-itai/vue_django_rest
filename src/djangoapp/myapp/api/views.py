@@ -1,13 +1,14 @@
 from datetime import datetime
 from rest_framework import generics, status
 from myapp.models import TestModel, RoomModel
-from myapp.api.serializers import TestSerealizer, RoomSerealizer
+from myapp.api.serializers import TestSerealizer, RoomSerealizer, RoomSerealizerImagePath
 from rest_framework.response import Response
 import os
 import datetime
 import base64
 from PIL import Image
 from io import BytesIO
+import uuid
 
 MEDIA_DIR = "media/"
 IMAGE_NAME = "upload_image"
@@ -40,12 +41,17 @@ class RoomInformation(generics.RetrieveAPIView):
     serializer_class = RoomSerealizer
     lookup_field = 'room_token'
 
-    #! 現状同じ値がDBに複数あるとエラーになる。 model格納時にuniqueを追加するか等の検討
-
     def get(self, request, **kwargs):
         url_path_token = kwargs.get('room_token')
         # .values()でクエリセットをjsonで取得
-        room_model = RoomModel.objects.values().get(room_token=url_path_token)
+        try:
+            room_model = RoomModel.objects.values().get(room_token=url_path_token)
+        except RoomModel.DoesNotExist:
+            print("【DEBUG】存在しないURL")
+            # エラー404を返す
+            content = {'error': "ページが存在しません"}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+
 
         if room_model["image1_path"] is not None:
             # saveディレクトリのpathを追加し、エンコード
@@ -92,15 +98,15 @@ class AddRoomInformation(generics.ListCreateAPIView):
 
             img_base64_list = [request.data['upload_image1'], request.data['upload_image2']]
 
-            # TODO:一旦仮でディレクトリの作成は日付+時刻
-            save_dir_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+            # TODO:一旦仮でディレクトリの作成は日付+uuid
+            token_uuid = str(uuid.uuid4())
+            save_dir_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S') + "-" + token_uuid
             save_image_dir_name_list = decode_upload_image(img_base64_list, save_dir_name)
 
             # ここで任意のURLを作成する
             request.data['room_url'] = request.headers['Origin'] + "/vote/" + save_dir_name
 
             # ここでトークンを作成する
-            #?現状tokenは登録日付
             request.data['room_token'] = save_dir_name
 
         print("【DEBUG】", request.data['room_name'], request.data['room_url'], request.data['image1_name'], request.data['image2_name'])

@@ -8,7 +8,13 @@
         <p>{{ Image1Name }}</p>
         <p>現在の投票数: {{ Image1VoteNum }}</p>
         <div class="box-vote">
-          <button id="vote-button1" class="btn-solid" v-on:click="user1VoteClick">投票する</button>
+          <button
+            id="vote-button1"
+            class="btn-solid"
+            v-on:click="user1VoteClick"
+          >
+            投票する
+          </button>
         </div>
       </div>
 
@@ -17,7 +23,13 @@
         <p>{{ Image2Name }}</p>
         <p>現在の投票数: {{ Image2VoteNum }}</p>
         <div class="box-vote">
-          <button id="vote-button2" class="btn-solid" v-on:click="user2VoteClick">投票する</button>
+          <button
+            id="vote-button2"
+            class="btn-solid"
+            v-on:click="user2VoteClick"
+          >
+            投票する
+          </button>
         </div>
       </div>
     </div>
@@ -46,7 +58,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.RoomToken);
     this.axios
       .get("/api/v1/room/information/" + this.RoomToken)
       .then((response) => {
@@ -57,6 +68,12 @@ export default {
         this.Image2Path = this.Datas.image2_path;
         this.Image1VoteNum = this.Datas.image1_votenum;
         this.Image2VoteNum = this.Datas.image2_votenum;
+      })
+      .catch((error) => {
+        console.log(error.response.status);
+        if (404 === error.response.status) {
+          console.log("エラーページに飛ばす処理を追加");
+        }
       });
   },
   methods: {
@@ -83,22 +100,19 @@ export default {
       }
     },
     VoteButtonHighlight(vote1, vote2) {
-      let elembutton1 = document.querySelector('#vote-button1');
-      let elembutton2 = document.querySelector('#vote-button2');
+      let elembutton1 = document.querySelector("#vote-button1");
+      let elembutton2 = document.querySelector("#vote-button2");
       if (vote1) {
-        elembutton1.classList.add('highlight');
-      }
-      else {
-        elembutton1.classList.remove('highlight');
+        elembutton1.classList.add("highlight");
+      } else {
+        elembutton1.classList.remove("highlight");
       }
 
       if (vote2) {
-        elembutton2.classList.add('highlight');
+        elembutton2.classList.add("highlight");
+      } else {
+        elembutton2.classList.remove("highlight");
       }
-      else {
-        elembutton2.classList.remove('highlight');
-      }
-
     },
     VoteResultSend() {
       if (this.bUser1Vote || this.bUser2Vote) {
