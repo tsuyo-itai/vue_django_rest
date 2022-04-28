@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  django:
+    build:
+      dockerfile: ./src/djangoapp/Dockerfile
+
+    container_name: 'django-server'
+    # サービス起動後に入力されるコマンドを設定
+    command: python3 -u /code/djangoapp/manage.py runserver 0.0.0.0:8000
+    ports:
+      - 9000:8000
+    environment:
+      TZ: Asia/Tokyo
+    volumes:
+      - ./src/djangoapp:/code/djangoapp
+  
+  vue:
+    build:
+      dockerfile: ./src/vueapp/Dockerfile
+
+    container_name: 'vue-server'
+    # サービス起動後に入力されるコマンドを設定
+    command: npm run serve
+    ports:
+      - 9080:8080
+    environment:
+      TZ: Asia/Tokyo
+    volumes:
+      - ./src/vueapp:/code/vueapp

@@ -1,7 +1,7 @@
 from datetime import datetime
 from rest_framework import generics, status
 from myapp.models import TestModel, RoomModel
-from myapp.api.serializers import TestSerealizer, RoomSerealizer, RoomSerealizerImagePath
+from myapp.api.serializers import TestSerealizer, RoomSerealizer
 from rest_framework.response import Response
 import os
 import datetime

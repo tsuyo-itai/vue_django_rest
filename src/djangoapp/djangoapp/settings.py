@@ -132,8 +132,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8080',
     'http://127.0.0.1:8080',
+    'http://localhost:9080',
+    'http://127.0.0.1:9080',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
+    'http://localhost:9000',
+    'http://127.0.0.1:9000',
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
