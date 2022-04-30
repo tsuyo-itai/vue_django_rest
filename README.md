@@ -26,6 +26,8 @@
 ## DOCKER UP
 
 ### Setup
+`pip3 install -r requirements.txt`
+
 `cd djangoapp`
 
 `python3 manage.py makemigrations myapp`
